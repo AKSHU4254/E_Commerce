@@ -66,8 +66,8 @@ export const getProductController = async (req, res) => {
       .find({})
       .populate("category")
       .select("-photo")
-      .limit(12)
-      .sort({ createdAt: -1 });
+      // .limit(12)
+      // .sort({ createdAt: -1 });
     res.status(200).send({
       success: true,
       counTTotal: products.length,
@@ -148,7 +148,7 @@ export const updateProductController = async (req, res) => {
     const { name, description, price, category, quantity, shipping } =
       req.fields;
     const { photo } = req.files;
-    //alidation
+    //Validation
     switch (true) {
       case !name:
         return res.status(500).send({ error: "Name is Required" });
@@ -166,6 +166,8 @@ export const updateProductController = async (req, res) => {
           .send({ error: "photo is Required and should be less then 1mb" });
     }
 
+
+    // Update product
     const products = await productModel.findByIdAndUpdate(
       req.params.pid,
       { ...req.fields, slug: slugify(name) },
@@ -234,7 +236,7 @@ export const productCountController = async (req, res) => {
 
 export const productListController = async (req, res) => {
   try {
-    const perPage = 8;
+    const perPage = 9;
     const page = req.params.page ? req.params.page : 1;
     const products = await productModel
       .find({})
